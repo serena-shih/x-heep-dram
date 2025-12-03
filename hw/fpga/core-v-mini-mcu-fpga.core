@@ -43,6 +43,7 @@ filesets:
   ip-fpga-zcu104:
     files:
     - scripts/zcu104/xilinx_generate_clk_wizard.tcl
+    - scripts/zcu104/xilinx_generate_dram.tcl
     file_type: tclSource
 
   ip-fpga-zcu102:

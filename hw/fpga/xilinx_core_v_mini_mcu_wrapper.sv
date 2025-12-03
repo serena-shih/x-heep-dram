@@ -78,6 +78,33 @@ module xilinx_core_v_mini_mcu_wrapper
   wire                               rst_n;
   logic [CLK_LED_COUNT_LENGTH - 1:0] clk_count;
 
+  obi_req_t ext_core_data_req;
+  obi_resp_t ext_core_data_resp;
+
+`ifdef FPGA_ZCU104
+  logic dram_gnt;
+  logic [31:0] dram_rsp_rdata;
+  logic dram_rsp_valid;
+
+  assign ext_core_data_resp.gnt = dram_gnt;
+  assign ext_core_data_resp.rdata = dram_rsp_rdata;
+  assign ext_core_data_resp.rvalid = dram_rsp_valid;
+
+  logic [31:0] dram_addr;
+  logic dram_req;
+  logic [3:0] dram_be;
+  logic [31:0] dram_wdata;
+  logic dram_we;
+
+  assign dram_addr = ext_core_data_req.addr;
+  assign dram_req = ext_core_data_req.req;
+  assign dram_be = ext_core_data_req.be;
+  assign dram_wdata = ext_core_data_req.wdata;
+  assign dram_we = ext_core_data_req.we;
+`else
+  assign ext_core_data_resp = '0;
+`endif
+
   // low active reset
 `ifdef FPGA_NEXYS
   assign rst_n = rst_i;
@@ -107,6 +134,17 @@ module xilinx_core_v_mini_mcu_wrapper
       .CLK_IN1_D_0_clk_n(clk_300mhz_n),
       .CLK_IN1_D_0_clk_p(clk_300mhz_p),
       .clk_out1_0(clk_gen)
+  );
+  dram_wrapper dram_wrapper_i (
+      .dram_rsp_valid_o(dram_rsp_valid),
+      .dram_addr_i(dram_addr),
+      .dram_req_i(dram_req),
+      .dram_be_i(dram_be),
+      .dram_wdata_i(dram_wdata),
+      .dram_we_i(dram_we),
+      .dram_rsp_rdata_o(dram_rsp_rdata),
+      .dram_rsp_error_o(),
+      .dram_gnt_o(dram_gnt)
   );
 `elsif FPGA_ZCU102
   xilinx_clk_wizard_wrapper xilinx_clk_wizard_wrapper_i (
@@ -145,8 +183,8 @@ module xilinx_core_v_mini_mcu_wrapper
       .ext_xbar_master_resp_o(),
       .ext_core_instr_req_o(),
       .ext_core_instr_resp_i('0),
-      .ext_core_data_req_o(),
-      .ext_core_data_resp_i('0),
+      .ext_core_data_req_o(ext_core_data_req),
+      .ext_core_data_resp_i(ext_core_data_resp),
       .ext_debug_master_req_o(),
       .ext_debug_master_resp_i('0),
       .ext_dma_read_req_o(),
