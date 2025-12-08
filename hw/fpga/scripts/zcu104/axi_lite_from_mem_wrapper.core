@@ -1,0 +1,19 @@
+CAPI=2:
+
+name: "x-heep:ip:axi_lite_from_mem_wrapper"
+description: "Wrapper for OBI to AXI."
+
+# Copyright 2025 EPFL
+# Solderpad Hardware License, Version 2.1, see LICENSE.md for details.
+# SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
+
+filesets:
+  files_rtl:
+    files:
+    - axi_lite_from_mem_wrapper.sv
+    file_type: systemVerilogSource
+
+targets:
+  default:
+    filesets:
+    - files_rtl
