@@ -123,6 +123,9 @@ if { $nRet != 0 } {
    return $nRet
 }
 
+set_property ip_repo_paths "../../../hw/fpga/scripts/zcu104/ip_repo" [current_project]
+update_ip_catalog
+
 set bCheckIPsPassed 1
 ##################################################################
 # CHECK IPs
@@ -131,7 +134,7 @@ set bCheckIPs 1
 if { $bCheckIPs == 1 } {
    set list_check_ips "\ 
 xilinx.com:ip:zynq_ultra_ps_e:3.5\
-x-heep:ip:axi_lite_from_mem_wrapper:1.0\
+user.org:user:axi_lite_from_mem_wrapper:1.0\
 xilinx.com:ip:smartconnect:1.0\
 xilinx.com:ip:proc_sys_reset:5.0\
 "
@@ -199,15 +202,15 @@ proc create_root_design { parentCell } {
   # Create interface ports
 
   # Create ports
-  set dram_rsp_valid_o [ create_bd_port -dir O mem_rsp_valid_o_0 ]
-  set dram_addr_i [ create_bd_port -dir I -from 31 -to 0 mem_addr_i_0 ]
-  set dram_req_i [ create_bd_port -dir I mem_req_i_0 ]
-  set dram_be_i [ create_bd_port -dir I -from 3 -to 0 mem_be_i_0 ]
-  set dram_wdata_i [ create_bd_port -dir I -from 31 -to 0 mem_wdata_i_0 ]
-  set dram_we_i [ create_bd_port -dir I mem_we_i_0 ]
-  set dram_rsp_rdata_o [ create_bd_port -dir O -from 31 -to 0 mem_rsp_rdata_o_0 ]
-  set dram_rsp_error_o [ create_bd_port -dir O mem_rsp_error_o_0 ]
-  set dram_gnt_o [ create_bd_port -dir O mem_gnt_o_0 ]
+  set dram_rsp_valid_o [ create_bd_port -dir O dram_rsp_valid_o ]
+  set dram_addr_i [ create_bd_port -dir I -from 31 -to 0 dram_addr_i ]
+  set dram_req_i [ create_bd_port -dir I dram_req_i ]
+  set dram_be_i [ create_bd_port -dir I -from 3 -to 0 dram_be_i ]
+  set dram_wdata_i [ create_bd_port -dir I -from 31 -to 0 dram_wdata_i ]
+  set dram_we_i [ create_bd_port -dir I dram_we_i ]
+  set dram_rsp_rdata_o [ create_bd_port -dir O -from 31 -to 0 dram_rsp_rdata_o ]
+  set dram_rsp_error_o [ create_bd_port -dir O dram_rsp_error_o ]
+  set dram_gnt_o [ create_bd_port -dir O dram_gnt_o ]
 
   # Create instance: zynq_ultra_ps_e_0, and set properties
   set zynq_ultra_ps_e_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:zynq_ultra_ps_e:3.5 zynq_ultra_ps_e_0 ]
@@ -1225,24 +1228,24 @@ Port;FD4A0000;FD4AFFFF;1|FPD;DPDMA;FD4C0000;FD4CFFFF;1|FPD;DDR_XMPU5_CFG;FD05000
   connect_bd_intf_net -intf_net axi_smc_M00_AXI [get_bd_intf_pins axi_smc/M00_AXI] [get_bd_intf_pins zynq_ultra_ps_e_0/S_AXI_HP0_FPD]
 
   # Create port connections
-  connect_bd_net -net axi_lite_from_mem_wr_0_mem_gnt_o  [get_bd_pins axi_lite_from_mem_wr_0/mem_gnt_o] \
-  [get_bd_ports mem_gnt_o_0]
-  connect_bd_net -net axi_lite_from_mem_wr_0_mem_rsp_error_o  [get_bd_pins axi_lite_from_mem_wr_0/mem_rsp_error_o] \
-  [get_bd_ports mem_rsp_error_o_0]
-  connect_bd_net -net axi_lite_from_mem_wr_0_mem_rsp_rdata_o  [get_bd_pins axi_lite_from_mem_wr_0/mem_rsp_rdata_o] \
-  [get_bd_ports mem_rsp_rdata_o_0]
-  connect_bd_net -net axi_lite_from_mem_wr_0_mem_rsp_valid_o  [get_bd_pins axi_lite_from_mem_wr_0/mem_rsp_valid_o] \
-  [get_bd_ports mem_rsp_valid_o_0]
-  connect_bd_net -net mem_addr_i_0_1  [get_bd_ports mem_addr_i_0] \
-  [get_bd_pins axi_lite_from_mem_wr_0/mem_addr_i]
-  connect_bd_net -net mem_be_i_0_1  [get_bd_ports mem_be_i_0] \
-  [get_bd_pins axi_lite_from_mem_wr_0/mem_be_i]
-  connect_bd_net -net mem_req_i_0_1  [get_bd_ports mem_req_i_0] \
-  [get_bd_pins axi_lite_from_mem_wr_0/mem_req_i]
-  connect_bd_net -net mem_wdata_i_0_1  [get_bd_ports mem_wdata_i_0] \
-  [get_bd_pins axi_lite_from_mem_wr_0/mem_wdata_i]
-  connect_bd_net -net mem_we_i_0_1  [get_bd_ports mem_we_i_0] \
-  [get_bd_pins axi_lite_from_mem_wr_0/mem_we_i]
+  connect_bd_net -net axi_lite_from_mem_wr_0_dram_gnt_o  [get_bd_pins axi_lite_from_mem_wr_0/dram_gnt_o] \
+  [get_bd_ports dram_gnt_o]
+  connect_bd_net -net axi_lite_from_mem_wr_0_dram_rsp_error_o  [get_bd_pins axi_lite_from_mem_wr_0/dram_rsp_error_o] \
+  [get_bd_ports dram_rsp_error_o]
+  connect_bd_net -net axi_lite_from_mem_wr_0_dram_rsp_rdata_o  [get_bd_pins axi_lite_from_mem_wr_0/dram_rsp_rdata_o] \
+  [get_bd_ports dram_rsp_rdata_o]
+  connect_bd_net -net axi_lite_from_mem_wr_0_dram_rsp_valid_o  [get_bd_pins axi_lite_from_mem_wr_0/dram_rsp_valid_o] \
+  [get_bd_ports dram_rsp_valid_o]
+  connect_bd_net -net dram_addr_i_0_1  [get_bd_ports dram_addr_i] \
+  [get_bd_pins axi_lite_from_mem_wr_0/dram_addr_i]
+  connect_bd_net -net dram_be_i_0_1  [get_bd_ports dram_be_i] \
+  [get_bd_pins axi_lite_from_mem_wr_0/dram_be_i]
+  connect_bd_net -net dram_req_i_0_1  [get_bd_ports dram_req_i] \
+  [get_bd_pins axi_lite_from_mem_wr_0/dram_req_i]
+  connect_bd_net -net dram_wdata_i_0_1  [get_bd_ports dram_wdata_i] \
+  [get_bd_pins axi_lite_from_mem_wr_0/dram_wdata_i]
+  connect_bd_net -net dram_we_i_0_1  [get_bd_ports dram_we_i] \
+  [get_bd_pins axi_lite_from_mem_wr_0/dram_we_i]
   connect_bd_net -net rst_ps8_0_100M_peripheral_aresetn  [get_bd_pins rst_ps8_0_100M/peripheral_aresetn] \
   [get_bd_pins axi_lite_from_mem_wr_0/rst_ni] \
   [get_bd_pins axi_smc/aresetn]

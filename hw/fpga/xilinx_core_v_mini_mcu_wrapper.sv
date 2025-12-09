@@ -73,13 +73,13 @@ module xilinx_core_v_mini_mcu_wrapper
 
 );
 
-  wire                               clk_gen;
-  logic [                      31:0] exit_value;
-  wire                               rst_n;
-  logic [CLK_LED_COUNT_LENGTH - 1:0] clk_count;
+  wire                                    clk_gen;
+  logic      [                      31:0] exit_value;
+  wire                                    rst_n;
+  logic      [CLK_LED_COUNT_LENGTH - 1:0] clk_count;
 
-  obi_req_t ext_core_data_req;
-  obi_resp_t ext_core_data_resp;
+  obi_req_t                               ext_core_data_req;
+  obi_resp_t                              ext_core_data_resp;
 
 `ifdef FPGA_ZCU104
   logic dram_gnt;

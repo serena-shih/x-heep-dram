@@ -43,6 +43,11 @@ filesets:
   ip-fpga-zcu104:
     files:
     - scripts/zcu104/xilinx_generate_clk_wizard.tcl
+    - scripts/zcu104/axi_pkg.sv: {file_type: systemVerilogSource}
+    - scripts/zcu104/registers.svh: {file_type: systemVerilogSource}
+    - scripts/zcu104/fifo_v3.sv: {file_type: systemVerilogSource}
+    - scripts/zcu104/axi_lite_from_mem.sv: {file_type: systemVerilogSource}
+    - scripts/zcu104/axi_lite_from_mem_wrapper.sv: {file_type: systemVerilogSource}
     - scripts/zcu104/xilinx_generate_dram.tcl
     file_type: tclSource
 
